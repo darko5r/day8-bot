@@ -1,5 +1,13 @@
 import random
 import string
+from difflib import SequenceMatcher
+
+def fuzzy_match(text, candidates, cutoff=0.88):
+    return any(
+        SequenceMatcher(None, text, candidate).ratio() >= cutoff
+        for candidate in candidates
+    )
+
 
 english_greetings = {
     "hi",
@@ -8,6 +16,7 @@ english_greetings = {
     "yo",
     "sup",
     "wassup",
+    "whazzup",
     "wagwan",
 }
 
@@ -269,14 +278,28 @@ while True:
         print(random.choice(argentine_goodbye_responses))
         break
 
-    english_activity_recall_detected = any(
-        phrase in normalized_message
-        for phrase in english_activity_recall_questions
+    english_activity_recall_detected = (
+        any(
+            phrase in normalized_message
+            for phrase in english_activity_recall_questions
+        )
+        or fuzzy_match(
+            normalized_message,
+            english_activity_recall_questions,
+            cutoff=0.90,
+        )
     )
 
-    argentine_activity_recall_detected = any(
-        phrase in normalized_message
-        for phrase in argentine_activity_recall_questions
+    argentine_activity_recall_detected = (
+        any(
+            phrase in normalized_message
+            for phrase in argentine_activity_recall_questions
+        )
+        or fuzzy_match(
+            normalized_message,
+            argentine_activity_recall_questions,
+            cutoff=0.90,
+        )
     )
 
     if english_activity_recall_detected:
@@ -350,6 +373,17 @@ while True:
         or normalized_message.startswith("qué onda")
     )
 
+    english_greeting_detected = (
+        bool(english_greetings.intersection(words))
+        or fuzzy_match(normalized_message, english_greetings)
+    )
+
+    argentine_greeting_detected = (
+        bool(argentine_greetings.intersection(words))
+        or argentine_greeting_phrase
+        or fuzzy_match(normalized_message, argentine_greetings)
+    )
+
     english_wellbeing_detected = any(
         phrase in normalized_message
         for phrase in english_wellbeing_questions
@@ -374,13 +408,13 @@ while True:
         print(random.choice(english_wellbeing_responses))
         conversation_state = "waiting_for_english_wellbeing"
 
-    elif argentine_greetings.intersection(words) or argentine_greeting_phrase:
+    elif argentine_greeting_detected:
         response, next_state = random.choice(argentine_greeting_options)
 
         print(response)
         conversation_state = next_state
 
-    elif english_greetings.intersection(words):
+    elif english_greeting_detected:
         response, next_state = random.choice(english_greeting_options)
 
         print(response)
