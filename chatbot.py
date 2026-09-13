@@ -16,17 +16,38 @@ argentine_greetings = {
     "holis",
 }
 
-english_greeting_responses = (
-    "Dee Dee: Wah gwaan? U good?",
-    "Dee Dee: Yo, mi deh yah. What’s good?",
-    "Dee Dee: Ayy, what’s the vibe?",
+english_greeting_options = (
+    (
+        "Dee Dee: Wah gwaan? U good?",
+        "waiting_for_english_wellbeing",
+    ),
+    (
+        "Dee Dee: Yo, mi deh yah. What’s good?",
+        None,
+    ),
+    (
+        "Dee Dee: Ayy, what’s the vibe?",
+        None,
+    ),
 )
 
-argentine_greeting_responses = (
-    "Dee Dee: Che, ¿qué onda?",
-    "Dee Dee: Holis, ¿todo piola?",
-    "Dee Dee: Buenas, ¿todo tranqui?",
-    "Dee Dee: De una, acá estoy. ¿Qué contás?",
+argentine_greeting_options = (
+    (
+        "Dee Dee: Che, ¿qué onda?",
+        None,
+    ),
+    (
+        "Dee Dee: Holis, ¿todo piola?",
+        "waiting_for_argentine_wellbeing",
+    ),
+    (
+        "Dee Dee: Buenas, ¿todo tranqui?",
+        "waiting_for_argentine_wellbeing",
+    ),
+    (
+        "Dee Dee: De una, acá estoy. ¿Qué contás?",
+        None,
+    ),
 )
 
 english_exit_commands = {
@@ -219,12 +240,16 @@ while True:
         conversation_state = "waiting_for_english_wellbeing"
 
     elif argentine_greetings.intersection(words) or argentine_greeting_phrase:
-        print(random.choice(argentine_greeting_responses))
-        conversation_state = "waiting_for_argentine_wellbeing"
+        response, next_state = random.choice(argentine_greeting_options)
+
+        print(response)
+        conversation_state = next_state
 
     elif english_greetings.intersection(words):
-        print(random.choice(english_greeting_responses))
-        conversation_state = "waiting_for_english_wellbeing"
+        response, next_state = random.choice(english_greeting_options)
+
+        print(response)
+        conversation_state = next_state
 
     elif argentine_detected:
         print(random.choice(argentine_unknown_responses))
