@@ -180,6 +180,18 @@ argentine_vibe_followups = (
     "Dee Dee: Joya. ¿En qué andás ahora?",
 )
 
+english_activity_responses = (
+    "Dee Dee: Seen. Dat sound like a proper mission.",
+    "Dee Dee: Aight, I see U cookin.",
+    "Dee Dee: Bet. Keep pushin on that.",
+)
+
+argentine_activity_responses = (
+    "Dee Dee: De una, suena piola eso.",
+    "Dee Dee: Bien ahí, metele.",
+    "Dee Dee: Joya, banco ese laburo.",
+)
+
 english_unknown_responses = (
     "Dee Dee: Mi nah catch that one. Run it by me different.",
     "Dee Dee: Hold up, what you mean by that?",
@@ -218,6 +230,7 @@ argentine_markers = {
 }
 
 conversation_state = None
+last_activity = None
 
 while True:
     user_message = input("U: ")
@@ -261,7 +274,7 @@ while True:
         and normalized_message in english_vibe_answers
     ):
         print(random.choice(english_vibe_followups))
-        conversation_state = None
+        conversation_state = "waiting_for_english_activity"
         continue
 
     if (
@@ -269,6 +282,22 @@ while True:
         and normalized_message in argentine_vibe_answers
     ):
         print(random.choice(argentine_vibe_followups))
+        conversation_state = "waiting_for_argentine_activity"
+        continue
+
+    if conversation_state == "waiting_for_english_activity":
+        last_activity = user_message.strip()
+
+        print(random.choice(english_activity_responses))
+
+        conversation_state = None
+        continue
+
+    if conversation_state == "waiting_for_argentine_activity":
+        last_activity = user_message.strip()
+
+        print(random.choice(argentine_activity_responses))
+
         conversation_state = None
         continue
 
