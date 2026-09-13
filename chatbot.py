@@ -82,6 +82,38 @@ argentine_wellbeing_responses = (
     "Dee Dee: Todo joya. ¿Qué onda vos?",
 )
 
+english_positive_wellbeing = {
+    "good",
+    "great",
+    "fine",
+    "okay",
+    "ok",
+    "cool",
+    "chillin",
+    "chilling",
+}
+
+argentine_positive_wellbeing = {
+    "bien",
+    "joya",
+    "tranqui",
+    "piola",
+    "todo bien",
+    "de diez",
+}
+
+english_positive_followups = (
+    "Dee Dee: Bet, love to hear that.",
+    "Dee Dee: Aight, dat’s what mi like fi hear.",
+    "Dee Dee: Good good, keep that energy.",
+)
+
+argentine_positive_followups = (
+    "Dee Dee: De una, me alegro.",
+    "Dee Dee: Joya entonces.",
+    "Dee Dee: Bien ahí, che.",
+)
+
 english_unknown_responses = (
     "Dee Dee: Mi nah catch that one. Run it by me different.",
     "Dee Dee: Hold up, what you mean by that?",
@@ -118,6 +150,8 @@ argentine_markers = {
     "joya",
 }
 
+conversation_state = None
+
 while True:
     user_message = input("U: ")
 
@@ -138,6 +172,22 @@ while True:
     if normalized_message in argentine_exit_commands:
         print(random.choice(argentine_goodbye_responses))
         break
+
+    if (
+        conversation_state == "waiting_for_english_wellbeing"
+        and normalized_message in english_positive_wellbeing
+    ):
+        print(random.choice(english_positive_followups))
+        conversation_state = None
+        continue
+
+    if (
+        conversation_state == "waiting_for_argentine_wellbeing"
+        and normalized_message in argentine_positive_wellbeing
+    ):
+        print(random.choice(argentine_positive_followups))
+        conversation_state = None
+        continue
 
     argentine_greeting_phrase = (
         normalized_message.startswith("que onda")
@@ -162,15 +212,19 @@ while True:
 
     if argentine_wellbeing_detected:
         print(random.choice(argentine_wellbeing_responses))
+        conversation_state = "waiting_for_argentine_wellbeing"
 
     elif english_wellbeing_detected:
         print(random.choice(english_wellbeing_responses))
+        conversation_state = "waiting_for_english_wellbeing"
 
     elif argentine_greetings.intersection(words) or argentine_greeting_phrase:
         print(random.choice(argentine_greeting_responses))
+        conversation_state = "waiting_for_argentine_wellbeing"
 
     elif english_greetings.intersection(words):
         print(random.choice(english_greeting_responses))
+        conversation_state = "waiting_for_english_wellbeing"
 
     elif argentine_detected:
         print(random.choice(argentine_unknown_responses))
