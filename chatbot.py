@@ -35,6 +35,12 @@ goodbye_responses = (
     "Dee Dee: Chauuu, nos vemos.",
 )
 
+unknown_responses = (
+    "Dee Dee: Mi nah catch that one. Run it by me different.",
+    "Dee Dee: Hold up, what you mean by that?",
+    "Dee Dee: Nah, you lost me there. Say it another way.",
+)
+
 while True:
     user_message = input("U: ")
 
@@ -59,3 +65,5 @@ while True:
 
     if greetings.intersection(words) or greeting_phrase:
         print(random.choice(greeting_responses))
+    else:
+        print(random.choice(unknown_responses))
