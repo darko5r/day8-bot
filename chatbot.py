@@ -229,6 +229,22 @@ argentine_markers = {
     "laburando",
 }
 
+english_activity_recall_questions = {
+    "what am i working on",
+    "what was i working on",
+    "what am i doing",
+    "what was i doing",
+}
+
+argentine_activity_recall_questions = {
+    "en que estaba laburando",
+    "en qué estaba laburando",
+    "que estaba haciendo",
+    "qué estaba haciendo",
+    "en que andaba",
+    "en qué andaba",
+}
+
 conversation_state = None
 last_activity = None
 
@@ -252,6 +268,34 @@ while True:
     if normalized_message in argentine_exit_commands:
         print(random.choice(argentine_goodbye_responses))
         break
+
+    english_activity_recall_detected = any(
+        phrase in normalized_message
+        for phrase in english_activity_recall_questions
+    )
+
+    argentine_activity_recall_detected = any(
+        phrase in normalized_message
+        for phrase in argentine_activity_recall_questions
+    )
+
+    if english_activity_recall_detected:
+        if last_activity is None:
+            print("Dee Dee: Nah, U ain't told me what U workin on yet.")
+        else:
+            print(f'Dee Dee: U told me U workin on: "{last_activity}"')
+
+        conversation_state = None
+        continue
+
+    if argentine_activity_recall_detected:
+        if last_activity is None:
+            print("Dee Dee: Todavía no me dijiste en qué andabas.")
+        else:
+            print(f'Dee Dee: Me dijiste que estabas con: "{last_activity}"')
+
+        conversation_state = None
+        continue
 
     if (
         conversation_state == "waiting_for_english_wellbeing"
