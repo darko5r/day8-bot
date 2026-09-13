@@ -23,18 +23,18 @@ english_greeting_options = (
     ),
     (
         "Dee Dee: Yo, mi deh yah. What’s good?",
-        None,
+        "waiting_for_english_vibe",
     ),
     (
         "Dee Dee: Ayy, what’s the vibe?",
-        None,
+        "waiting_for_english_vibe",
     ),
 )
 
 argentine_greeting_options = (
     (
         "Dee Dee: Che, ¿qué onda?",
-        None,
+        "waiting_for_argentine_vibe",
     ),
     (
         "Dee Dee: Holis, ¿todo piola?",
@@ -46,7 +46,7 @@ argentine_greeting_options = (
     ),
     (
         "Dee Dee: De una, acá estoy. ¿Qué contás?",
-        None,
+        "waiting_for_argentine_vibe",
     ),
 )
 
@@ -112,6 +112,9 @@ english_positive_wellbeing = {
     "cool",
     "chillin",
     "chilling",
+    "yes",
+    "yeah",
+    "yep",
 }
 
 argentine_positive_wellbeing = {
@@ -121,6 +124,8 @@ argentine_positive_wellbeing = {
     "piola",
     "todo bien",
     "de diez",
+    "si",
+    "sí",
 }
 
 english_positive_followups = (
@@ -133,6 +138,46 @@ argentine_positive_followups = (
     "Dee Dee: De una, me alegro.",
     "Dee Dee: Joya entonces.",
     "Dee Dee: Bien ahí, che.",
+)
+
+english_vibe_answers = {
+    "coding",
+    "just coding",
+    "working",
+    "just working",
+    "chillin",
+    "chilling",
+    "nothing",
+    "not much",
+    "same old",
+    "good",
+}
+
+argentine_vibe_answers = {
+    "laburando",
+    "aca laburando",
+    "acá laburando",
+    "trabajando",
+    "aca trabajando",
+    "acá trabajando",
+    "nada",
+    "tranqui",
+    "todo tranqui",
+    "todo piola",
+    "bien",
+    "lo de siempre",
+}
+
+english_vibe_followups = (
+    "Dee Dee: Aight, locked in. What U workin on?",
+    "Dee Dee: Bet. What got U busy right now?",
+    "Dee Dee: Seen. What U got goin on?",
+)
+
+argentine_vibe_followups = (
+    "Dee Dee: De una. ¿En qué andás laburando?",
+    "Dee Dee: Piola. ¿Qué tenés entre manos?",
+    "Dee Dee: Joya. ¿En qué andás ahora?",
 )
 
 english_unknown_responses = (
@@ -169,6 +214,7 @@ argentine_markers = {
     "piola",
     "posta",
     "joya",
+    "laburando",
 }
 
 conversation_state = None
@@ -207,6 +253,22 @@ while True:
         and normalized_message in argentine_positive_wellbeing
     ):
         print(random.choice(argentine_positive_followups))
+        conversation_state = None
+        continue
+
+    if (
+        conversation_state == "waiting_for_english_vibe"
+        and normalized_message in english_vibe_answers
+    ):
+        print(random.choice(english_vibe_followups))
+        conversation_state = None
+        continue
+
+    if (
+        conversation_state == "waiting_for_argentine_vibe"
+        and normalized_message in argentine_vibe_answers
+    ):
+        print(random.choice(argentine_vibe_followups))
         conversation_state = None
         continue
 
