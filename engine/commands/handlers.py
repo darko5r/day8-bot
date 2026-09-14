@@ -4,6 +4,7 @@ from data.commands import (
     COMMAND_LAYER_VERSION,
     ENGINE_VERSION,
     MOTD_LINES,
+    PERSONALITY_LAYER_VERSION,
     TRUST_LAYER_VERSION,
 )
 from engine.commands.models import (
@@ -12,6 +13,7 @@ from engine.commands.models import (
     CommandStatus,
 )
 from engine.commands.registry import iter_command_specs
+from engine.personality import joke_response, personality_status_text
 from engine.trust.models import (
     Capability,
     ROLE_CODES,
@@ -133,6 +135,7 @@ def handle_version(command, memory, runtime):
                 f"Engine   : {ENGINE_VERSION}",
                 f"Commands : {COMMAND_LAYER_VERSION}",
                 f"Trust    : {TRUST_LAYER_VERSION}",
+                f"Personality: {PERSONALITY_LAYER_VERSION}",
                 f"Protocol : {runtime.protocol}",
             )
         )
@@ -720,3 +723,10 @@ def handle_exit(command, memory, runtime):
         "*** Dee Dee session closed.",
         action=CommandAction.EXIT_SESSION,
     )
+
+def handle_joke(command, memory, runtime):
+    return CommandResult(joke_response(memory.session.language))
+
+
+def handle_mood(command, memory, runtime):
+    return CommandResult(personality_status_text(memory))

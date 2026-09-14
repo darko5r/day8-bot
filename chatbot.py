@@ -44,7 +44,8 @@ def main():
             continue
 
         response, should_exit = handle_message(user_message, memory)
-        print(response)
+        if response is not None:
+            print(response)
 
         if should_exit:
             break

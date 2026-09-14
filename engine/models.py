@@ -19,6 +19,13 @@ class Intent(str, Enum):
     NEXT_RECALL = "next_recall"
     NAME_SET = "name_set"
     NAME_RECALL = "name_recall"
+    BOT_IDENTITY_QUERY = "bot_identity_query"
+    BOT_CAPABILITIES_QUERY = "bot_capabilities_query"
+    JOKE_REQUEST = "joke_request"
+    DISCOURAGEMENT = "discouragement"
+    ENGINEERING_ANTIPATTERN = "engineering_antipattern"
+    TECHNICAL_SETBACK = "technical_setback"
+    TECHNICAL_SUCCESS = "technical_success"
     UNKNOWN = "unknown"
 
 
@@ -32,11 +39,21 @@ class Prompt(str, Enum):
     NEXT_STEP = "next_step"
 
 
+class Tone(str, Enum):
+    SARCASTIC = "sarcastic"
+    PLAYFUL = "playful"
+    FOCUSED = "focused"
+    SERIOUS = "serious"
+    MOTIVATIONAL = "motivational"
+
+
 @dataclass
 class SessionMemory:
     language: str = "english"
     last_prompt: Prompt = Prompt.NONE
     last_intent: Intent = Intent.UNKNOWN
+    tone: Tone = Tone.FOCUSED
+    failure_streak: int = 0
 
 
 @dataclass

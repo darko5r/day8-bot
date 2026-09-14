@@ -132,3 +132,103 @@ UNKNOWN_RESPONSES = (
     "Dee Dee: Bancá, ahí me perdí. Explicámelo distinto.",
     "Dee Dee: Posta que no agarré esa. Probá de nuevo.",
 )
+
+# Challenge-completeness FAQ, fun, and adaptive-personality vocabulary.
+BOT_IDENTITY_QUESTIONS = {
+    "quien sos", "quién sos", "que sos", "qué sos", "que es dee dee",
+    "qué es dee dee", "contame quien sos", "contame quién sos",
+}
+
+BOT_CAPABILITIES_QUESTIONS = {
+    "que podes hacer", "qué podés hacer", "que haces", "qué hacés",
+    "en que me podes ayudar", "en qué me podés ayudar",
+    "como me podes ayudar", "cómo me podés ayudar",
+}
+
+JOKE_REQUESTS = {
+    "contame un chiste", "tirate un chiste", "tírate un chiste",
+    "haceme reir", "haceme reír", "decime algo gracioso",
+}
+
+DISCOURAGEMENT_PHRASES = {
+    "me rindo", "no puedo con esto", "no me sale", "soy un desastre",
+    "no lo voy a sacar", "ya fue no puedo", "fallo cinco veces",
+    "falló cinco veces",
+}
+
+ENGINEERING_ANTIPATTERN_PHRASES = {
+    "borre el test", "borré el test", "saque el test", "saqué el test",
+    "desactive el test", "desactivé el test", "ignore el error",
+    "ignoré el error",
+}
+
+TECHNICAL_SETBACK_PHRASES = {
+    "fallo otra vez", "falló otra vez", "sigue fallando", "todavia falla",
+    "todavía falla", "no anda", "sigue roto", "mismo error", "otro error",
+}
+
+TECHNICAL_SUCCESS_PHRASES = {
+    "funciona ahora", "ya funciona", "ya anda", "lo arregle", "lo arreglé",
+    "pasaron los tests", "los tests pasan", "anda ahora",
+}
+
+BOT_IDENTITY_RESPONSES = (
+    "Dee Dee: Soy Dee Dee: revisora técnica, mentora, ayudante de proyectos "
+    "y medio servicio de red old-school. Estricta con la evidencia, seca con "
+    "el sarcasmo y con criterio para saber cuándo cortar el chiste.",
+    "Dee Dee: Dee Dee. Revisión técnica, mentoría, ayuda de proyecto y alma "
+    "de servicio viejo. Me gusta la evidencia y tengo poca paciencia para "
+    "las decisiones de ingeniería que se merecen una gastada.",
+)
+
+BOT_CAPABILITIES_RESPONSES = (
+    "Dee Dee: Puedo charlar, recordar tu nombre y el contexto de tu tarea, "
+    "contestar preguntas comunes, tirar chistes y manejar mi sistema de "
+    "comandos y confianza. Poné !help para ver el registro.",
+    "Dee Dee: Conversación, memoria de tareas, preguntas comunes, humor, tono "
+    "adaptativo y comandos propios. !help te muestra el lado de servicio.",
+)
+
+JOKES = (
+    "Dee Dee: Un dev dijo 'en mi máquina anda'. "
+    "El servidor respondió: 'mirá qué suerte la tuya'.",
+    "Dee Dee: Le pedí al bug pasos para reproducirse. "
+    "Me contestó: 'deployá un viernes'.",
+    "Dee Dee: Borraron el test que fallaba. Impecable: "
+    "ahora el bug viene con menos documentación.",
+    "Dee Dee: El código tenía una sola tarea. Se la delegó a comportamiento indefinido.",
+)
+
+SARCASTIC_ENGINEERING_RESPONSES = (
+    "Dee Dee: Hermoso. Si borramos el test, el test deja de fallar. "
+    "Volvelo a poner y arreglemos el problema de verdad.",
+    "Dee Dee: Tremenda estrategia: silenciar la evidencia y declarar victoria. "
+    "No. Revertí eso y mostrame el fallo.",
+    "Dee Dee: Ah, sí, la técnica ancestral de sacar la alarma porque hace ruido. "
+    "Deshacelo y vamos al error real.",
+)
+
+FOCUSED_SETBACK_RESPONSES = (
+    "Dee Dee: Bien. Un fallo es un dato, no una sentencia. "
+    "Mostrame el primer paso que da distinto de lo esperado.",
+    "Dee Dee: Sin adivinar todavía. Pasame la salida exacta y dónde aparece "
+    "la primera divergencia.",
+)
+
+MOTIVATIONAL_RESPONSES = (
+    "Dee Dee: No. El proyecto no va a la basura por insistente. "
+    "Cada fallo es evidencia. Mostrame la primera divergencia y seguimos desde ahí.",
+    "Dee Dee: Seguís acá, así que seguimos laburando. "
+    "No cuentes fallos como derrotas; contá qué hipótesis descartó cada uno.",
+    "Dee Dee: Esto no te gana por repetición. Salida exacta, expectativa exacta, "
+    "primera diferencia. Una cosa por vez.",
+)
+
+PLAYFUL_SUCCESS_RESPONSES = (
+    "Dee Dee: Mirá vos, la máquina dejó de discutir. Bien. "
+    "Ahora verificá la regresión antes de hacer la vuelta olímpica.",
+    "Dee Dee: Después de todo el drama decidió andar. Perfecto. "
+    "Probalo dos veces y recién ahí le creemos.",
+    "Dee Dee: Ahí está. Victoria provisoria: tests primero, festejo después.",
+)
+

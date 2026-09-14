@@ -58,6 +58,41 @@ def detect_intent(user_message, normalized, memory):
     if _contains_any(normalized, ar.NAME_RECALL):
         return Detection(Intent.NAME_RECALL, "argentine")
 
+    if _contains_any(normalized, en.BOT_IDENTITY_QUESTIONS):
+        return Detection(Intent.BOT_IDENTITY_QUERY, "english")
+    if _contains_any(normalized, ar.BOT_IDENTITY_QUESTIONS):
+        return Detection(Intent.BOT_IDENTITY_QUERY, "argentine")
+
+    if _contains_any(normalized, en.BOT_CAPABILITIES_QUESTIONS):
+        return Detection(Intent.BOT_CAPABILITIES_QUERY, "english")
+    if _contains_any(normalized, ar.BOT_CAPABILITIES_QUESTIONS):
+        return Detection(Intent.BOT_CAPABILITIES_QUERY, "argentine")
+
+    if _contains_any(normalized, en.JOKE_REQUESTS):
+        return Detection(Intent.JOKE_REQUEST, "english")
+    if _contains_any(normalized, ar.JOKE_REQUESTS):
+        return Detection(Intent.JOKE_REQUEST, "argentine")
+
+    if _contains_any(normalized, en.DISCOURAGEMENT_PHRASES):
+        return Detection(Intent.DISCOURAGEMENT, "english")
+    if _contains_any(normalized, ar.DISCOURAGEMENT_PHRASES):
+        return Detection(Intent.DISCOURAGEMENT, "argentine")
+
+    if _contains_any(normalized, en.ENGINEERING_ANTIPATTERN_PHRASES):
+        return Detection(Intent.ENGINEERING_ANTIPATTERN, "english")
+    if _contains_any(normalized, ar.ENGINEERING_ANTIPATTERN_PHRASES):
+        return Detection(Intent.ENGINEERING_ANTIPATTERN, "argentine")
+
+    if _contains_any(normalized, en.TECHNICAL_SETBACK_PHRASES):
+        return Detection(Intent.TECHNICAL_SETBACK, "english")
+    if _contains_any(normalized, ar.TECHNICAL_SETBACK_PHRASES):
+        return Detection(Intent.TECHNICAL_SETBACK, "argentine")
+
+    if _contains_any(normalized, en.TECHNICAL_SUCCESS_PHRASES):
+        return Detection(Intent.TECHNICAL_SUCCESS, "english")
+    if _contains_any(normalized, ar.TECHNICAL_SUCCESS_PHRASES):
+        return Detection(Intent.TECHNICAL_SUCCESS, "argentine")
+
     if (
         _contains_any(normalized, en.ACTIVITY_RECALL)
         or fuzzy_match(normalized, en.ACTIVITY_RECALL, cutoff=0.90)

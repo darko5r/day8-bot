@@ -22,6 +22,8 @@ class CommandId(str, Enum):
     POLICY = "policy"
     IDENTITY = "identity"
     SHUTDOWN = "shutdown"
+    JOKE = "joke"
+    MOOD = "mood"
     EXIT = "exit"
 
 

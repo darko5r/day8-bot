@@ -111,6 +111,18 @@ COMMAND_SPECS = (
         required_capability=Capability.SERVICE_SHUTDOWN.value,
     ),
     CommandSpec(
+        command_id=CommandId.JOKE,
+        name="joke",
+        usage="!joke",
+        summary="Ask Dee Dee for a randomized dry technical joke.",
+    ),
+    CommandSpec(
+        command_id=CommandId.MOOD,
+        name="mood",
+        usage="!mood",
+        summary="Show Dee Dee's current adaptively inferred tone.",
+    ),
+    CommandSpec(
         command_id=CommandId.EXIT,
         name="exit",
         usage="!exit",

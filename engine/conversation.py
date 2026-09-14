@@ -5,6 +5,11 @@ from data import english as en
 from engine.detect import detect_intent
 from engine.models import Intent, Prompt
 from engine.normalize import normalize_message
+from engine.personality import (
+    apply_adaptive_tone,
+    joke_response,
+    personality_event_response,
+)
 
 
 PROMPT_BY_NAME = {
@@ -28,14 +33,42 @@ def _clear_prompt(memory):
 
 def handle_message(user_message, memory):
     normalized = normalize_message(user_message)
+    if not normalized:
+        return None, False
+
     detection = detect_intent(user_message, normalized, memory)
     memory.session.last_intent = detection.intent
     memory.session.language = detection.language
     data = _dataset(detection.language)
+    tone = apply_adaptive_tone(detection, memory)
 
     if detection.intent == Intent.GOODBYE:
         _clear_prompt(memory)
         return random.choice(data.GOODBYE_RESPONSES), True
+
+    if detection.intent == Intent.BOT_IDENTITY_QUERY:
+        return random.choice(data.BOT_IDENTITY_RESPONSES), False
+
+    if detection.intent == Intent.BOT_CAPABILITIES_QUERY:
+        return random.choice(data.BOT_CAPABILITIES_RESPONSES), False
+
+    if detection.intent == Intent.JOKE_REQUEST:
+        return joke_response(detection.language), False
+
+    if detection.intent in {
+        Intent.DISCOURAGEMENT,
+        Intent.ENGINEERING_ANTIPATTERN,
+        Intent.TECHNICAL_SETBACK,
+        Intent.TECHNICAL_SUCCESS,
+    }:
+        return (
+            personality_event_response(
+                detection.language,
+                detection.intent,
+                tone,
+            ),
+            False,
+        )
 
     if detection.intent == Intent.NAME_SET:
         memory.profile.name = detection.payload

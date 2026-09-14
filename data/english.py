@@ -123,3 +123,103 @@ UNKNOWN_RESPONSES = (
     "Dee Dee: Hold up, what you mean by that?",
     "Dee Dee: Nah, you lost me there. Say it another way.",
 )
+
+# Challenge-completeness FAQ, fun, and adaptive-personality vocabulary.
+BOT_IDENTITY_QUESTIONS = {
+    "who are you", "what are you", "what is dee dee", "whats dee dee",
+    "tell me about yourself",
+}
+
+BOT_CAPABILITIES_QUESTIONS = {
+    "what can you do", "what do you do", "how can you help",
+    "how can you help me", "what are your features",
+}
+
+JOKE_REQUESTS = {
+    "tell me a joke", "tell me joke", "got a joke", "make me laugh",
+    "say something funny", "give me a joke",
+}
+
+DISCOURAGEMENT_PHRASES = {
+    "i cant do this", "i cannot do this", "i want to give up",
+    "im giving up", "i give up", "cant get this right",
+    "i cant get this right", "i suck at this", "failed five times",
+    "this is the fifth time it failed",
+}
+
+ENGINEERING_ANTIPATTERN_PHRASES = {
+    "deleted the test", "removed the test", "disabled the test",
+    "commented out the test", "ignored the error", "turned off the test",
+}
+
+TECHNICAL_SETBACK_PHRASES = {
+    "failed again", "failing again", "still failing", "it is still failing",
+    "still broken", "doesnt work", "not working", "same error",
+    "another error",
+}
+
+TECHNICAL_SUCCESS_PHRASES = {
+    "it works now", "it works", "works now", "fixed it", "tests pass",
+    "the tests pass", "finally works", "got it working",
+}
+
+BOT_IDENTITY_RESPONSES = (
+    "Dee Dee: Mi Dee Dee — technical reviewer, mentor, project helper, "
+    "an a lil old-school network service. Strict on evidence, dry with the "
+    "sarcasm, and smart enough fi know when jokes need to stop.",
+    "Dee Dee: Name's Dee Dee. Technical reviewer, mentor, project helper, "
+    "old-school service energy. Mi like evidence, clean reasoning, and "
+    "occasionally roasting engineering decisions that deserve it.",
+)
+
+BOT_CAPABILITIES_RESPONSES = (
+    "Dee Dee: Mi can chat, remember your name and task context, answer common "
+    "questions, run my service commands, and track scoped trust roles. "
+    "Type !help fi the command registry.",
+    "Dee Dee: Conversation, task memory, FAQ, jokes, adaptive tone, and my own "
+    "service command system. !help shows the command side without the sales pitch.",
+)
+
+JOKES = (
+    "Dee Dee: A developer said, 'It works on my machine.' "
+    "The server filed that under fiction.",
+    "Dee Dee: I asked the bug for reproduction steps. "
+    "It said, 'Deploy on Friday.'",
+    "Dee Dee: Deleted the failing test? Stunning. "
+    "Quality assurance has apparently become a deletion strategy.",
+    "Dee Dee: The code had one job. It outsourced it to undefined behavior.",
+)
+
+SARCASTIC_ENGINEERING_RESPONSES = (
+    "Dee Dee: Beautiful. Can't have a failing test if there ain't a test. "
+    "Put it back and fix the actual problem.",
+    "Dee Dee: Bold strategy: silence the evidence and declare victory. "
+    "Nah. Restore it, then we debug what really failed.",
+    "Dee Dee: Ah yes, the ancient engineering technique of hiding the smoke alarm. "
+    "Undo that and show me the failure.",
+)
+
+FOCUSED_SETBACK_RESPONSES = (
+    "Dee Dee: Aight. One failure is data, not a verdict. "
+    "Show me the exact failing step or output.",
+    "Dee Dee: Seen. Don't guess yet. Give me the first place the observed result "
+    "diverges from what U expected.",
+)
+
+MOTIVATIONAL_RESPONSES = (
+    "Dee Dee: Nah. We ain't throwing the project in the bin. "
+    "Every failure is evidence. Show me the first divergence and we work from there.",
+    "Dee Dee: U still here, so we still workin. Stop counting failures like losses. "
+    "Count what each one ruled out. We only need the first wrong assumption.",
+    "Dee Dee: This thing doesn't get to beat U by being repetitive. "
+    "Exact output, exact expectation, first divergence. We take it one piece at a time.",
+)
+
+PLAYFUL_SUCCESS_RESPONSES = (
+    "Dee Dee: Look at that. The machine finally stopped arguing. Nice. "
+    "Now verify the regression case before U start celebrating too loud.",
+    "Dee Dee: So after all that drama, the computer decided to cooperate. "
+    "Good. Prove it twice and then we call it fixed.",
+    "Dee Dee: There we go. Victory accepted provisionally — tests first, confetti later.",
+)
+
