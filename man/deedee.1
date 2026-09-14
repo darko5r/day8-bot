@@ -1,0 +1,345 @@
+.TH DEEDEE 1 "September 2026" "Dee Dee" "User Commands"
+
+.SH NAME
+deedee \- conversational technical reviewer, mentor, and project assistant
+
+.SH SYNOPSIS
+.B python chatbot.py
+
+.SH DESCRIPTION
+.B Dee Dee
+is a conversational chatbot with structured memory, intent detection,
+adaptive conversational tone, a command system, and scoped community
+authorization.
+
+Dee Dee can remember a user's name and task context, respond to common
+questions, tell jokes, recognize different ways of expressing an intent,
+and adapt replies according to conversational context.
+
+Her normal personality is technical, strict, dry, sarcastic, ironic,
+and deliberately old-school in presentation.
+
+Sarcasm is reduced when the conversation indicates genuine discouragement
+or a serious personal context. Repeated technical failures may cause Dee Dee
+to move from focused troubleshooting into a more motivational tone.
+
+.SH STARTING DEE DEE
+From the project directory, run:
+
+.PP
+.nf
+python chatbot.py
+.fi
+
+.PP
+The terminal prompt is:
+
+.PP
+.nf
+U:
+.fi
+
+.PP
+Enter normal conversational text or a command beginning with
+.BR ! .
+
+.SH CONVERSATION
+Dee Dee understands several classes of conversational input.
+
+.TP
+.B Greetings and goodbyes
+Common greetings and natural goodbyes are recognized in English and
+Argentine Spanish.
+
+.TP
+.B Common questions
+Questions such as "who are you?" and "what can you do?" receive
+direct responses.
+
+.TP
+.B Name memory
+A user may introduce a name with phrases such as:
+
+.PP
+.nf
+my name is Darko
+me llamo Darko
+.fi
+
+.PP
+The stored name can later be recalled conversationally.
+
+.TP
+.B Task memory
+Dee Dee can remember a current activity, its focus, and a next step.
+
+.TP
+.B Context
+Short replies may be interpreted according to the previous question or
+conversation state.
+
+.TP
+.B Jokes
+Jokes can be requested conversationally or with
+.BR !joke .
+
+.TP
+.B Adaptive tone
+Dee Dee may respond in focused, playful, sarcastic, serious, or
+motivational ways according to the current conversation.
+
+.SH COMMANDS
+Command names are case-insensitive.
+
+.SS General commands
+
+.TP
+.B !help
+Display the command registry.
+
+.TP
+.B !motd
+Display the service message of the day.
+
+.TP
+.B !version
+Display version information for the active bot components.
+
+.TP
+.B !uptime
+Display process uptime.
+
+.TP
+.B !identity
+Display the stable adapter identity and current authorization scope.
+
+.TP
+.B !whois [id]
+Display the current user's profile information, or authorized identity
+information for another user.
+
+.TP
+.B !joke
+Return a randomized Dee Dee joke.
+
+.TP
+.B !mood
+Display Dee Dee's current adaptively inferred conversational tone.
+This command reports the tone; it does not set it.
+
+.TP
+.B !exit
+Close the current Dee Dee session.
+
+.SS Authorization and community commands
+
+.TP
+.B !role [id]
+Display a user's effective role.
+
+.TP
+.B !role set <id> <role>
+Assign a role when the caller has sufficient authority.
+
+.TP
+.B !flag [id]
+Display service flags.
+
+.TP
+.B !flag add <id> <flag>
+Add a service flag when authorized.
+
+.TP
+.B !flag remove <id> <flag>
+Remove a service flag when authorized.
+
+.TP
+.B !capabilities [id]
+Display effective capabilities.
+
+.TP
+.B !users
+List identities visible in the current authorization scope.
+
+.TP
+.B !audit [count]
+Display recent authority-change audit entries.
+Access is restricted.
+
+.TP
+.B !founder
+Display the active Founder identity.
+
+.TP
+.B !founder transfer <id> CONFIRM
+Transfer root authority to another known identity.
+Explicit confirmation is required.
+
+.TP
+.B !scope
+Display the current authorization scope.
+
+.TP
+.B !authz <capability> [scope]
+Explain whether the current identity is authorized for a capability.
+
+.TP
+.B !policy <capability>
+Display policy information for a capability when authorized.
+
+.TP
+.B !shutdown
+Request service shutdown.
+This operation is restricted to the Founder.
+
+.SH ROLES
+Dee Dee recognizes the following authority roles:
+
+.TP
+.B FOUNDER
+Root service authority.
+
+.TP
+.B SOP
+Highest delegated service authority.
+
+.TP
+.B OP
+Operational and community-administration authority.
+
+.TP
+.B DV
+Developer and technical-review authority.
+
+.TP
+.B MB
+Normal member authority.
+
+.TP
+.B GT
+Guest authority.
+
+.PP
+Higher rank does not imply that technical evidence becomes correct.
+Authorization controls permitted operations, not technical truth.
+
+.SH FLAGS
+Service flags are separate from roles.
+
+.TP
+.B T
+Trusted.
+
+.TP
+.B R
+Reviewer.
+
+.TP
+.B M
+Mentor.
+
+.TP
+.B C
+Contributor.
+
+.PP
+A flag does not automatically make a user an operator or administrator.
+
+.SH SCOPES
+Authorization may be evaluated within one of these scopes:
+
+.TP
+.B SELF
+The current stable identity.
+
+.TP
+.B CHANNEL
+A particular channel.
+
+.TP
+.B GUILD
+A particular server or community.
+
+.TP
+.B GLOBAL
+The Dee Dee service as a whole.
+
+.PP
+Community roles may be scoped so that authority in one guild does not
+automatically apply in another.
+
+.SH DISCORD IDENTITIES
+When used with a Discord adapter, authorization is based on stable numeric
+Discord user IDs rather than display names or nicknames.
+
+Display-name changes therefore do not change authorization identity.
+
+Guild and channel identifiers are likewise used to construct the applicable
+authorization scope.
+
+.SH EXAMPLES
+Start Dee Dee:
+
+.PP
+.nf
+python chatbot.py
+.fi
+
+.PP
+Ask about Dee Dee:
+
+.PP
+.nf
+U: who are you?
+U: what can you do?
+.fi
+
+.PP
+Use conversational memory:
+
+.PP
+.nf
+U: my name is Darko
+U: what is my name?
+.fi
+
+.PP
+Ask for a joke:
+
+.PP
+.nf
+U: tell me a joke
+U: !joke
+.fi
+
+.PP
+Inspect the current tone:
+
+.PP
+.nf
+U: !mood
+.fi
+
+.PP
+List commands:
+
+.PP
+.nf
+U: !help
+.fi
+
+.SH NOTES
+Conversation memory and authorization state are separate concepts.
+
+Commands that inspect or modify another identity may require additional
+authorization.
+
+Empty or whitespace-only conversational input produces no conversational
+response.
+
+.SH AUTHOR
+darko5r
+
+.SH SEE ALSO
+.BR python (1),
+.BR git (1)
