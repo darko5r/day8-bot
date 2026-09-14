@@ -350,6 +350,42 @@ If the native shared library is unavailable, Dee Dee automatically uses an
 equivalent Python implementation. Command syntax and registry behavior remain
 owned by the Python command layer.
 
+.SH DISCORD
+Install the Discord runtime dependency inside the Python virtual environment:
+
+.PP
+.nf
+python -m pip install -r requirements.txt
+.fi
+
+.PP
+The Discord adapter reads its credential and root identity from environment
+variables. The Discord credential must never be committed to the repository.
+
+.PP
+.nf
+export DEEDEE_DISCORD_CREDENTIAL='your-discord-bot-credential'
+export DEEDEE_FOUNDER_ID='your-numeric-discord-user-id'
+python discord_bot.py
+.fi
+
+.PP
+The Discord application must have Message Content Intent enabled. The bot
+requires permission to view the intended channel, send messages, and read
+message history.
+
+.PP
+Messages from bot accounts are ignored to prevent feedback loops. Conversation
+memory is scoped by Discord user, guild, and channel. Direct messages use a
+separate self-scoped conversation.
+
+.PP
+In Discord,
+.B !exit
+ends and resets only the current scoped conversation.
+.B !shutdown
+closes the Dee Dee service only after Founder authorization succeeds.
+
 .SH NOTES
 Conversation memory and authorization state are separate concepts.
 

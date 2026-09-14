@@ -17,3 +17,7 @@ class MemoryStore:
         if scope not in self._memories:
             self._memories[scope] = ConversationMemory()
         return self._memories[scope]
+
+    def reset(self, scope: tuple[str, str, str]) -> ConversationMemory:
+        self._memories[scope] = ConversationMemory()
+        return self._memories[scope]
