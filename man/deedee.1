@@ -128,6 +128,23 @@ Display Dee Dee's current adaptively inferred conversational tone.
 This command reports the tone; it does not set it.
 
 .TP
+.B !mode [id]
+Display channel membership modes for the current identity or an authorized
+target.
+
+.TP
+.B !mode +v|-v <id>
+Grant or remove channel voice membership. This mode is channel-local and is
+separate from Dee Dee service flags and Discord voice-channel permissions.
+
+.TP
+.B !clear [count]
+Clear recent messages from the current Discord channel. The default is 20 and
+the allowed range is 1 through 100. Pinned messages are preserved. Access is
+granted to Developer and higher roles, and to Members holding +v in that
+channel.
+
+.TP
 .B !exit
 Close the current Dee Dee session.
 
@@ -372,7 +389,9 @@ python discord_bot.py
 .PP
 The Discord application must have Message Content Intent enabled. The bot
 requires permission to view the intended channel, send messages, and read
-message history.
+message history. The
+.B !clear
+command additionally requires Manage Messages in the target channel.
 
 .PP
 Messages from bot accounts are ignored to prevent feedback loops. Conversation

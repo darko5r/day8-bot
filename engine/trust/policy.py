@@ -3,6 +3,7 @@ from engine.trust.models import (
     Capability,
     ScopeKind,
     ServiceFlag,
+    MembershipMode,
 )
 
 
@@ -39,6 +40,7 @@ CAPABILITIES_BY_ROLE = {
         Capability.REVIEW_DEEP,
         Capability.REVIEW_PUBLISH,
         Capability.MENTOR_USE,
+        Capability.CHANNEL_CLEAR,
         Capability.SERVICE_INSPECT,
     },
     AuthorityRole.OPERATOR: COMMON_INSPECTION
@@ -49,6 +51,7 @@ CAPABILITIES_BY_ROLE = {
         Capability.CHANNEL_MODE_SET,
         Capability.CHANNEL_OPERATOR_GRANT,
         Capability.CHANNEL_VOICE_GRANT,
+        Capability.CHANNEL_CLEAR,
         Capability.MODERATION_KICK,
         Capability.MODERATION_BAN,
         Capability.MODERATION_UNBAN,
@@ -68,6 +71,7 @@ CAPABILITIES_BY_ROLE = {
         Capability.CHANNEL_MODE_SET,
         Capability.CHANNEL_OPERATOR_GRANT,
         Capability.CHANNEL_VOICE_GRANT,
+        Capability.CHANNEL_CLEAR,
         Capability.MODERATION_KICK,
         Capability.MODERATION_BAN,
         Capability.MODERATION_UNBAN,
@@ -83,6 +87,15 @@ CAPABILITIES_BY_ROLE = {
         Capability.SERVICE_CONFIGURE,
     },
     AuthorityRole.FOUNDER: frozenset(Capability),
+}
+
+
+CAPABILITIES_BY_MEMBERSHIP = {
+    MembershipMode.VOICE: frozenset(
+        {
+            Capability.CHANNEL_CLEAR,
+        }
+    ),
 }
 
 
@@ -124,6 +137,7 @@ CAPABILITY_SCOPES = {
     Capability.CHANNEL_MODE_SET: frozenset({ScopeKind.CHANNEL}),
     Capability.CHANNEL_OPERATOR_GRANT: frozenset({ScopeKind.CHANNEL}),
     Capability.CHANNEL_VOICE_GRANT: frozenset({ScopeKind.CHANNEL}),
+    Capability.CHANNEL_CLEAR: frozenset({ScopeKind.CHANNEL}),
 
     Capability.MODERATION_KICK: frozenset(
         {ScopeKind.CHANNEL, ScopeKind.GUILD}
@@ -200,4 +214,12 @@ def flags_granting(capability):
         flag
         for flag in ServiceFlag
         if capability in CAPABILITIES_BY_FLAG[flag]
+    )
+
+
+def membership_modes_granting(capability):
+    return tuple(
+        mode
+        for mode in MembershipMode
+        if capability in CAPABILITIES_BY_MEMBERSHIP[mode]
     )

@@ -33,6 +33,10 @@ class ServiceFlag(str, Enum):
     CONTRIBUTOR = "C"
 
 
+class MembershipMode(str, Enum):
+    VOICE = "v"
+
+
 class Capability(str, Enum):
     CORE_READ = "core.read"
     PROFILE_READ_SELF = "profile.read.self"
@@ -48,6 +52,7 @@ class Capability(str, Enum):
     CHANNEL_MODE_SET = "channel.mode.set"
     CHANNEL_OPERATOR_GRANT = "channel.operator.grant"
     CHANNEL_VOICE_GRANT = "channel.voice.grant"
+    CHANNEL_CLEAR = "channel.clear"
 
     MODERATION_KICK = "moderation.kick"
     MODERATION_BAN = "moderation.ban"
@@ -149,6 +154,7 @@ class ScopeRef:
 class GrantSourceKind(str, Enum):
     ROLE = "role"
     FLAG = "flag"
+    MEMBERSHIP = "membership"
 
 
 @dataclass(frozen=True)
@@ -185,6 +191,7 @@ class TrustOperationStatus(str, Enum):
 class AuditAction(str, Enum):
     ROLE_SET = "role.set"
     FLAG_SET = "flag.set"
+    MODE_SET = "mode.set"
     FOUNDER_TRANSFER = "founder.transfer"
 
 

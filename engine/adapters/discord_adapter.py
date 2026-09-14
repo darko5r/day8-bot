@@ -20,6 +20,7 @@ DISCORD_MESSAGE_LIMIT = 1900
 class DiscordDispatchResult:
     messages: tuple[str, ...] = ()
     action: CommandAction = CommandAction.NONE
+    action_value: int | None = None
     ignored: bool = False
 
 
@@ -91,10 +92,18 @@ class DiscordEngineAdapter:
             identity_context=context,
         )
 
-    def _result(self, text, action=CommandAction.NONE, *, ignored=False):
+    def _result(
+        self,
+        text,
+        action=CommandAction.NONE,
+        action_value=None,
+        *,
+        ignored=False,
+    ):
         return DiscordDispatchResult(
             messages=split_discord_text(text, self.message_limit),
             action=action,
+            action_value=action_value,
             ignored=ignored,
         )
 
@@ -128,6 +137,7 @@ class DiscordEngineAdapter:
             return self._result(
                 command_result.text,
                 command_result.action,
+                command_result.action_value,
             )
 
         response, should_exit = handle_message(content, memory)

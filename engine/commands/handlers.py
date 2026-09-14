@@ -17,6 +17,7 @@ from engine.native.command_token import backend_name as command_name_backend
 from engine.personality import joke_response, personality_status_text
 from engine.trust.models import (
     Capability,
+    MembershipMode,
     ROLE_CODES,
     ScopeKind,
     ScopeRef,
@@ -24,9 +25,11 @@ from engine.trust.models import (
 )
 from engine.trust.policy import (
     flags_granting,
+    membership_modes_granting,
     roles_granting,
     scopes_for,
 )
+from engine.trust.discord import discord_stable_id
 from engine.trust.scope import parse_capability, parse_scope
 from engine.trust.service import parse_flag, parse_role
 
@@ -83,6 +86,22 @@ def _operation_result(result, success_text):
         f"*** TRUST0 denied.\nReason   : {reason}",
         status=CommandStatus.FORBIDDEN,
     )
+
+
+def _resolve_target_identity(value, runtime):
+    text = value.strip()
+    if runtime.protocol != "discord":
+        return text
+
+    if text.startswith("<@") and text.endswith(">"):
+        text = text[2:-1]
+        if text.startswith("!"):
+            text = text[1:]
+
+    if text.isascii() and text.isdigit():
+        return discord_stable_id(text)
+
+    return text
 
 
 def _cross_identity_inspection_allowed(runtime, target_id):
@@ -666,6 +685,13 @@ def handle_policy(command, memory, runtime):
             key=lambda item: item.value,
         )
     ) or "none"
+    mode_names = ", ".join(
+        f"+{mode.value}"
+        for mode in sorted(
+            membership_modes_granting(capability),
+            key=lambda item: item.value,
+        )
+    ) or "none"
 
     return CommandResult(
         "\n".join(
@@ -675,6 +701,7 @@ def handle_policy(command, memory, runtime):
                 f"Scopes     : {scope_names}",
                 f"Roles      : {role_names}",
                 f"Flags      : {flag_names}",
+                f"Modes      : {mode_names}",
             )
         )
     )
@@ -717,6 +744,138 @@ def handle_shutdown(command, memory, runtime):
     return CommandResult(
         "*** Dee Dee service shutdown authorized.",
         action=CommandAction.SHUTDOWN_SERVICE,
+    )
+
+
+def handle_mode(command, memory, runtime):
+    trust = runtime.trust_service
+    if trust is None:
+        return _trust_missing()
+
+    scope = runtime.effective_scope()
+    if scope.kind != ScopeKind.CHANNEL:
+        return CommandResult(
+            "*** MODE requires a Discord channel scope.",
+            status=CommandStatus.FORBIDDEN,
+        )
+
+    tokens = command.argument_text.split()
+
+    if len(tokens) == 2 and tokens[0].lower() in {"+v", "-v"}:
+        enabled = tokens[0].lower() == "+v"
+        target_id = _resolve_target_identity(tokens[1], runtime)
+        result = trust.set_channel_mode(
+            runtime.actor_id,
+            target_id,
+            MembershipMode.VOICE,
+            enabled,
+            scope,
+        )
+        verb = "added" if enabled else "removed"
+        return _operation_result(
+            result,
+            "\n".join(
+                (
+                    "*** MODE",
+                    f"Target   : {target_id}",
+                    f"Mode     : {'+v' if enabled else '-v'}",
+                    f"Action   : {verb}",
+                    f"Scope    : {scope.label()}",
+                )
+            ),
+        )
+
+    if len(tokens) > 1:
+        return CommandResult(
+            "*** Usage: !mode [id] | !mode +v|-v <id>",
+            status=CommandStatus.INVALID_ARGUMENTS,
+        )
+
+    target_id = (
+        _resolve_target_identity(tokens[0], runtime)
+        if tokens
+        else runtime.actor_id
+    )
+
+    privacy = _cross_identity_inspection_allowed(runtime, target_id)
+    if privacy is not None:
+        return privacy
+
+    record = trust.get(target_id)
+    if record is None:
+        return CommandResult(
+            f"*** Unknown identity: {target_id}",
+            status=CommandStatus.INVALID_ARGUMENTS,
+        )
+
+    modes = trust.channel_modes(target_id, scope)
+    mode_text = ",".join(
+        f"+{mode.value}"
+        for mode in sorted(modes, key=lambda item: item.value)
+    ) or "none"
+
+    return CommandResult(
+        "\n".join(
+            (
+                "*** MODE",
+                f"Identity : {target_id}",
+                f"Modes    : {mode_text}",
+                f"Scope    : {scope.label()}",
+            )
+        )
+    )
+
+
+def handle_clear(command, memory, runtime):
+    trust = runtime.trust_service
+    if trust is None:
+        return _trust_missing()
+
+    scope = runtime.effective_scope()
+    if scope.kind != ScopeKind.CHANNEL:
+        return CommandResult(
+            "*** CLEAR requires a Discord channel scope.",
+            status=CommandStatus.FORBIDDEN,
+        )
+
+    tokens = command.argument_text.split()
+    count = 20
+
+    if tokens:
+        if len(tokens) != 1:
+            return CommandResult(
+                "*** CLEAR count must be an integer from 1 to 100.",
+                status=CommandStatus.INVALID_ARGUMENTS,
+            )
+        try:
+            count = int(tokens[0])
+        except ValueError:
+            return CommandResult(
+                "*** CLEAR count must be an integer from 1 to 100.",
+                status=CommandStatus.INVALID_ARGUMENTS,
+            )
+
+    if not 1 <= count <= 100:
+        return CommandResult(
+            "*** CLEAR count must be an integer from 1 to 100.",
+            status=CommandStatus.INVALID_ARGUMENTS,
+        )
+
+    decision = trust.authorize(
+        runtime.actor_id,
+        Capability.CHANNEL_CLEAR,
+        scope,
+    )
+    if not decision.allowed:
+        return _authorization_denied(
+            decision,
+            Capability.CHANNEL_CLEAR,
+        )
+
+    return CommandResult(
+        "",
+        action=CommandAction.CLEAR_CHANNEL,
+        action_value=count,
     )
 
 

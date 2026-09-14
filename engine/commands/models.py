@@ -24,6 +24,8 @@ class CommandId(str, Enum):
     SHUTDOWN = "shutdown"
     JOKE = "joke"
     MOOD = "mood"
+    MODE = "mode"
+    CLEAR = "clear"
     EXIT = "exit"
 
 
@@ -38,6 +40,7 @@ class CommandAction(str, Enum):
     NONE = "none"
     EXIT_SESSION = "exit_session"
     SHUTDOWN_SERVICE = "shutdown_service"
+    CLEAR_CHANNEL = "clear_channel"
 
 
 class CommandStatus(str, Enum):
@@ -76,6 +79,7 @@ class CommandResult:
     text: str
     status: CommandStatus = CommandStatus.OK
     action: CommandAction = CommandAction.NONE
+    action_value: int | None = None
 
 
 @dataclass(frozen=True)

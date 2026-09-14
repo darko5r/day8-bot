@@ -123,6 +123,20 @@ COMMAND_SPECS = (
         summary="Show Dee Dee's current adaptively inferred tone.",
     ),
     CommandSpec(
+        command_id=CommandId.MODE,
+        name="mode",
+        usage="!mode [id] | !mode +v|-v <id>",
+        summary="Inspect or manage channel membership modes.",
+        accepts_arguments=True,
+    ),
+    CommandSpec(
+        command_id=CommandId.CLEAR,
+        name="clear",
+        usage="!clear [count]",
+        summary="Clear recent messages from the current Discord channel.",
+        accepts_arguments=True,
+    ),
+    CommandSpec(
         command_id=CommandId.EXIT,
         name="exit",
         usage="!exit",

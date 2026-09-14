@@ -24,6 +24,39 @@ def make_intents():
     return intents
 
 
+async def execute_transport_action(channel, result):
+    if result.action != CommandAction.CLEAR_CHANNEL:
+        return False
+
+    count = result.action_value
+    if count is None or not 1 <= count <= 100:
+        await channel.send(
+            "*** CLEAR failed: invalid transport action payload."
+        )
+        return True
+
+    try:
+        await channel.purge(
+            limit=count,
+            check=lambda message: not getattr(
+                message,
+                "pinned",
+                False,
+            ),
+        )
+    except discord.Forbidden:
+        await channel.send(
+            "*** CLEAR failed: Dee Dee needs Manage Messages "
+            "and Read Message History in this channel."
+        )
+    except discord.HTTPException:
+        await channel.send(
+            "*** CLEAR failed: Discord rejected the delete request."
+        )
+
+    return True
+
+
 class DeeDeeDiscordClient(discord.Client):
     def __init__(self, adapter, **kwargs):
         super().__init__(**kwargs)
@@ -50,6 +83,9 @@ class DeeDeeDiscordClient(discord.Client):
         )
 
         if result.ignored:
+            return
+
+        if await execute_transport_action(message.channel, result):
             return
 
         for chunk in result.messages:

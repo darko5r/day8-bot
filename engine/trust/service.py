@@ -12,6 +12,7 @@ from engine.trust.models import (
     GrantSourceKind,
     IdentityRecord,
     IdentityType,
+    MembershipMode,
     ROLE_CODES,
     ScopeKind,
     ScopeRef,
@@ -21,6 +22,7 @@ from engine.trust.models import (
 )
 from engine.trust.policy import (
     CAPABILITIES_BY_FLAG,
+    CAPABILITIES_BY_MEMBERSHIP,
     CAPABILITIES_BY_ROLE,
     FLAG_ASSIGNMENT_CAPABILITY,
     ROLE_ASSIGNMENT_CAPABILITY,
@@ -88,6 +90,7 @@ class TrustService:
             )
         }
         self._guild_roles = {}
+        self._channel_membership_modes = {}
         self._audit = []
         self._next_audit_sequence = 1
 
@@ -150,6 +153,15 @@ class TrustService:
             self._records[stable_id] = record
         return record
 
+    def channel_modes(self, stable_id, scope):
+        if scope is None or scope.kind != ScopeKind.CHANNEL:
+            return frozenset()
+        key = (scope.guild_id, scope.channel_id, stable_id)
+        return self._channel_membership_modes.get(key, frozenset())
+
+    def has_channel_mode(self, stable_id, mode, scope):
+        return mode in self.channel_modes(stable_id, scope)
+
     def effective_capabilities(self, stable_id, scope=None):
         record = self.get(stable_id)
         if record is None:
@@ -159,6 +171,11 @@ class TrustService:
         capabilities = set(CAPABILITIES_BY_ROLE[role])
         for flag in record.flags:
             capabilities.update(CAPABILITIES_BY_FLAG[flag])
+
+        if role == AuthorityRole.MEMBER:
+            for mode in self.channel_modes(stable_id, scope):
+                capabilities.update(CAPABILITIES_BY_MEMBERSHIP[mode])
+
         return frozenset(capabilities)
 
     def capability_source(self, stable_id, capability, scope=None):
@@ -179,6 +196,17 @@ class TrustService:
                     GrantSourceKind.FLAG,
                     flag.value,
                 )
+
+        if role == AuthorityRole.MEMBER:
+            for mode in sorted(
+                self.channel_modes(stable_id, scope),
+                key=lambda item: item.value,
+            ):
+                if capability in CAPABILITIES_BY_MEMBERSHIP[mode]:
+                    return GrantSource(
+                        GrantSourceKind.MEMBERSHIP,
+                        f"+{mode.value}",
+                    )
 
         return None
 
@@ -231,6 +259,92 @@ class TrustService:
             capability=capability,
             scope=scope,
             source=source,
+        )
+
+    def set_channel_mode(
+        self,
+        actor_id,
+        target_id,
+        mode,
+        enabled,
+        scope,
+    ):
+        if scope.kind != ScopeKind.CHANNEL:
+            return TrustOperationResult(
+                TrustOperationStatus.DENIED,
+                DenialReason.OUT_OF_SCOPE,
+            )
+
+        actor = self.get(actor_id)
+        if actor is None:
+            result = TrustOperationResult(
+                TrustOperationStatus.DENIED,
+                DenialReason.UNKNOWN_IDENTITY,
+            )
+            return self._append_audit(
+                AuditAction.MODE_SET,
+                actor_id,
+                target_id,
+                result,
+                scope=scope,
+            )
+
+        decision = self.authorize(
+            actor_id,
+            Capability.CHANNEL_VOICE_GRANT,
+            scope,
+        )
+        if not decision.allowed:
+            result = TrustOperationResult(
+                TrustOperationStatus.DENIED,
+                decision.reason,
+            )
+            return self._append_audit(
+                AuditAction.MODE_SET,
+                actor_id,
+                target_id,
+                result,
+                scope=scope,
+            )
+
+        target = self.get(target_id)
+        if target is None:
+            target = self.ensure_guest(target_id)
+
+        key = (scope.guild_id, scope.channel_id, target_id)
+        before_modes = self._channel_membership_modes.get(
+            key,
+            frozenset(),
+        )
+        after_modes = set(before_modes)
+
+        if enabled:
+            after_modes.add(mode)
+        else:
+            after_modes.discard(mode)
+
+        after_modes = frozenset(after_modes)
+        if after_modes == before_modes:
+            result = TrustOperationResult(
+                TrustOperationStatus.NO_CHANGE,
+            )
+        else:
+            if after_modes:
+                self._channel_membership_modes[key] = after_modes
+            else:
+                self._channel_membership_modes.pop(key, None)
+            result = TrustOperationResult(
+                TrustOperationStatus.APPLIED,
+            )
+
+        return self._append_audit(
+            AuditAction.MODE_SET,
+            actor_id,
+            target_id,
+            result,
+            before=target,
+            after=target,
+            scope=scope,
         )
 
     def _append_audit(

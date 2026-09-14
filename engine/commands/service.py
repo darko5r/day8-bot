@@ -11,6 +11,8 @@ from engine.commands.handlers import (
     handle_identity,
     handle_joke,
     handle_mood,
+    handle_mode,
+    handle_clear,
     handle_motd,
     handle_policy,
     handle_role,
@@ -51,6 +53,8 @@ COMMAND_HANDLERS = {
     CommandId.SHUTDOWN: handle_shutdown,
     CommandId.JOKE: handle_joke,
     CommandId.MOOD: handle_mood,
+    CommandId.MODE: handle_mode,
+    CommandId.CLEAR: handle_clear,
     CommandId.EXIT: handle_exit,
 }
 
