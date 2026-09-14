@@ -2,7 +2,7 @@ GREETING_WORDS = {
     "hi", "hello", "hey", "yo", "sup", "wassup", "whazzup", "wagwan",
 }
 
-GOODBYE_WORDS = {"bye", "goodbye", "exit", "quit"}
+GOODBYE_WORDS = {"bye", "goodbye"}
 
 WELLBEING_QUESTIONS = {
     "how are you", "how u doing", "how are u", "you good", "u good",
