@@ -328,6 +328,28 @@ List commands:
 U: !help
 .fi
 
+.SH NATIVE COMMAND BACKEND
+Dee Dee can optionally use a small native C backend for ASCII command-name
+validation and lowercasing.
+
+.PP
+Build the native backend from the project directory with:
+
+.PP
+.nf
+./tools/build-native.sh
+.fi
+
+.PP
+The generated shared library is stored under
+.BR build/ ,
+which is not tracked by Git.
+
+.PP
+If the native shared library is unavailable, Dee Dee automatically uses an
+equivalent Python implementation. Command syntax and registry behavior remain
+owned by the Python command layer.
+
 .SH NOTES
 Conversation memory and authorization state are separate concepts.
 

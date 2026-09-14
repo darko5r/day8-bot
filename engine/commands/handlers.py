@@ -13,6 +13,7 @@ from engine.commands.models import (
     CommandStatus,
 )
 from engine.commands.registry import iter_command_specs
+from engine.native.command_token import backend_name as command_name_backend
 from engine.personality import joke_response, personality_status_text
 from engine.trust.models import (
     Capability,
@@ -134,6 +135,7 @@ def handle_version(command, memory, runtime):
                 f"Build    : {BOT_BUILD}",
                 f"Engine   : {ENGINE_VERSION}",
                 f"Commands : {COMMAND_LAYER_VERSION}",
+                f"CmdName  : {command_name_backend()}",
                 f"Trust    : {TRUST_LAYER_VERSION}",
                 f"Personality: {PERSONALITY_LAYER_VERSION}",
                 f"Protocol : {runtime.protocol}",

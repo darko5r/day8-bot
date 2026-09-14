@@ -1,13 +1,9 @@
-import re
-
 from engine.commands.models import (
     CommandParseResult,
     CommandParseStatus,
     ParsedCommand,
 )
-
-
-COMMAND_NAME_PATTERN = re.compile(r"^[A-Za-z][A-Za-z0-9_-]*$")
+from engine.native.command_token import normalize_command_token
 
 
 def parse_command(raw_text, known_names):
@@ -24,10 +20,9 @@ def parse_command(raw_text, known_names):
     parts = body.split(maxsplit=1)
     command_token = parts[0]
 
-    if not COMMAND_NAME_PATTERN.fullmatch(command_token):
+    canonical_name = normalize_command_token(command_token)
+    if canonical_name is None:
         return CommandParseResult(CommandParseStatus.MALFORMED)
-
-    canonical_name = command_token.lower()
     argument_text = parts[1].strip() if len(parts) == 2 else ""
     parsed = ParsedCommand(
         raw=raw_text,
