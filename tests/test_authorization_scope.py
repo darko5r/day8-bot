@@ -15,7 +15,7 @@ from engine.trust.scope import parse_scope
 from engine.trust.service import TrustService
 
 
-class TrustR2ScopeTests(unittest.TestCase):
+class AuthorizationScopeTests(unittest.TestCase):
     def setUp(self):
         self.trust = TrustService("founder")
         self.trust.set_role("founder", "sop", AuthorityRole.SOP)
@@ -170,7 +170,7 @@ class TrustR2ScopeTests(unittest.TestCase):
         self.assertEqual(decision.source.label(), "flag:R")
 
 
-class TrustR2CommandTests(unittest.TestCase):
+class AuthorizationScopeCommandTests(unittest.TestCase):
     def setUp(self):
         self.memory = MemoryStore().get(("guild", "channel", "founder"))
         self.trust = TrustService("founder")
@@ -196,7 +196,7 @@ class TrustR2CommandTests(unittest.TestCase):
             self.runtime_for(actor, scope),
         )
 
-    def test_help_exposes_r2_diagnostics(self):
+    def test_help_exposes_authorization_diagnostics(self):
         result = self.command("!help")
         for command in ("!scope", "!authz", "!policy"):
             self.assertIn(command, result.text)

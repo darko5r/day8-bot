@@ -17,7 +17,7 @@ from engine.trust.models import (
 from engine.trust.service import TrustService
 
 
-class TrustR1ServiceTests(unittest.TestCase):
+class AuthorityAuditServiceTests(unittest.TestCase):
     def setUp(self):
         self.trust = TrustService("founder")
 
@@ -137,7 +137,7 @@ class TrustR1ServiceTests(unittest.TestCase):
         )
 
 
-class TrustR1CommandTests(unittest.TestCase):
+class AuthorityAuditCommandTests(unittest.TestCase):
     def setUp(self):
         self.memory = MemoryStore().get(("guild", "channel", "founder"))
         self.trust = TrustService("founder")
@@ -159,7 +159,7 @@ class TrustR1CommandTests(unittest.TestCase):
             self.runtime_for(actor),
         )
 
-    def test_help_exposes_r1_trust_commands(self):
+    def test_help_exposes_authority_commands(self):
         result = self.command("!help")
         for command in ("!users", "!audit", "!founder"):
             self.assertIn(command, result.text)

@@ -68,13 +68,13 @@ def parse_flag(value):
 
 
 class TrustService:
-    """In-memory TRUST0 authorization authority.
+    """In-memory scoped authorization authority.
 
-    Stable IDs are adapter-provided identities. Display names and conversation
-    profile names are never used for authorization.
+    Stable IDs are supplied by transport adapters. Display names and
+    conversation profile names are never authorization identities.
 
-    TRUST0 R2 adds typed authorization scopes and source diagnostics while
-    retaining R1's auditable authority mutations and Founder-transfer model.
+    Global and guild-local roles, service flags, and channel membership modes
+    contribute capabilities under typed authorization scopes.
     """
 
     def __init__(self, founder_id):

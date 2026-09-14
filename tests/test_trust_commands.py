@@ -11,7 +11,7 @@ from engine.trust.models import AuthorityRole, ServiceFlag
 from engine.trust.service import TrustService
 
 
-class TrustCommandTests(unittest.TestCase):
+class AuthorizationCommandTests(unittest.TestCase):
     def setUp(self):
         self.memory = MemoryStore().get(("guild", "channel", "founder"))
         self.trust = TrustService("founder")
@@ -39,7 +39,7 @@ class TrustCommandTests(unittest.TestCase):
             trust_service=self.trust,
         )
 
-    def test_help_exposes_trust0_surface(self):
+    def test_help_exposes_authorization_surface(self):
         result = self.command("!help")
         for command in (
             "!role",

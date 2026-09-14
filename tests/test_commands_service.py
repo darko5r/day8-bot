@@ -40,8 +40,8 @@ class CommandServiceTests(unittest.TestCase):
 
     def test_version_reports_command_and_engine_layers(self):
         result = self.command("!version")
-        self.assertIn("Conversation Engine R0", result.text)
-        self.assertIn("Retro Command Layer R0", result.text)
+        self.assertIn("Conversation Engine", result.text)
+        self.assertIn("Command Service", result.text)
         self.assertIn("terminal", result.text)
 
     def test_uptime_uses_injected_clock(self):
@@ -68,10 +68,10 @@ class CommandServiceTests(unittest.TestCase):
         self.assertIn("WHOIS Alice", other_result.text)
         self.assertNotIn("Darko", other_result.text)
 
-    def test_cross_user_whois_is_refused_in_r0(self):
+    def test_cross_user_whois_requires_authorization_runtime(self):
         self.memory.profile.name = "Darko"
         result = self.command("!whois Alice")
-        self.assertIn("Cross-user lookup is unavailable in R0", result.text)
+        self.assertIn("requires an authorization-enabled runtime", result.text)
         self.assertNotIn("Nick     : Darko", result.text)
 
     def test_unknown_command_can_suggest_but_does_not_execute(self):

@@ -1,11 +1,11 @@
 from data.commands import (
-    BOT_BUILD,
+    AUTHORIZATION_SERVICE_NAME,
     BOT_NAME,
-    COMMAND_LAYER_VERSION,
-    ENGINE_VERSION,
+    COMMAND_SERVICE_NAME,
+    ENGINE_NAME,
     MOTD_LINES,
-    PERSONALITY_LAYER_VERSION,
-    TRUST_LAYER_VERSION,
+    PERSONALITY_NAME,
+    RELEASE_VERSION,
 )
 from engine.commands.models import (
     CommandAction,
@@ -50,7 +50,7 @@ def _flags_text(record):
 
 def _trust_missing():
     return CommandResult(
-        "*** TRUST0 unavailable for this runtime.",
+        "*** Authorization service unavailable for this runtime.",
         status=CommandStatus.FORBIDDEN,
     )
 
@@ -83,7 +83,7 @@ def _operation_result(result, success_text):
 
     reason = result.reason.value if result.reason is not None else "policy_denied"
     return CommandResult(
-        f"*** TRUST0 denied.\nReason   : {reason}",
+        f"*** Authorization denied.\nReason   : {reason}",
         status=CommandStatus.FORBIDDEN,
     )
 
@@ -150,14 +150,14 @@ def handle_version(command, memory, runtime):
         "\n".join(
             (
                 "*** VERSION",
-                f"Bot      : {BOT_NAME}",
-                f"Build    : {BOT_BUILD}",
-                f"Engine   : {ENGINE_VERSION}",
-                f"Commands : {COMMAND_LAYER_VERSION}",
-                f"CmdName  : {command_name_backend()}",
-                f"Trust    : {TRUST_LAYER_VERSION}",
-                f"Personality: {PERSONALITY_LAYER_VERSION}",
-                f"Protocol : {runtime.protocol}",
+                f"Bot          : {BOT_NAME}",
+                f"Release      : {RELEASE_VERSION}",
+                f"Engine       : {ENGINE_NAME}",
+                f"Commands     : {COMMAND_SERVICE_NAME}",
+                f"CmdName      : {command_name_backend()}",
+                f"Authorization: {AUTHORIZATION_SERVICE_NAME}",
+                f"Personality  : {PERSONALITY_NAME}",
+                f"Protocol     : {runtime.protocol}",
             )
         )
     )
@@ -185,8 +185,8 @@ def handle_whois(command, memory, runtime):
     if not is_self:
         if trust is None:
             return CommandResult(
-                "*** WHOIS R0\n"
-                "Cross-user lookup is unavailable in R0.\n"
+                "*** WHOIS\n"
+                "Cross-user lookup requires an authorization-enabled runtime.\n"
                 "Use !whois with no arguments to inspect your own scoped record.",
                 status=CommandStatus.FORBIDDEN,
             )
@@ -465,7 +465,7 @@ def handle_users(command, memory, runtime):
         )
 
     lines = [
-        "*** TRUST0 USERS",
+        "*** USERS",
         f"Scope    : {inspection_scope.label()}",
     ]
     for record, role in trust.records_for_scope(inspection_scope):
@@ -507,7 +507,7 @@ def handle_audit(command, memory, runtime):
             )
 
     events = trust.audit_events(count)
-    lines = ["*** TRUST0 AUDIT"]
+    lines = ["*** AUTHORITY AUDIT"]
     if not events:
         lines.append("(no authority changes recorded)")
     for event in events:
@@ -696,7 +696,7 @@ def handle_policy(command, memory, runtime):
     return CommandResult(
         "\n".join(
             (
-                "*** TRUST0 POLICY",
+                "*** AUTHORIZATION POLICY",
                 f"Capability : {capability.value}",
                 f"Scopes     : {scope_names}",
                 f"Roles      : {role_names}",

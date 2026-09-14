@@ -83,7 +83,7 @@ def _authorization_result(spec, runtime):
 
     if runtime.trust_service is None:
         return CommandResult(
-            "*** TRUST0 authorization unavailable.\n"
+            "*** Authorization unavailable.\n"
             f"Required : {spec.required_capability}",
             status=CommandStatus.FORBIDDEN,
         )

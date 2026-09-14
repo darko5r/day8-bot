@@ -1,1 +1,1 @@
-"""TRUST0 authorization and identity policy."""
+"""Authorization, identity, and trust policy."""

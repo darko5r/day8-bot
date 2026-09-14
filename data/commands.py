@@ -1,10 +1,10 @@
 BOT_NAME = "Dee Dee"
-BOT_BUILD = "development"
-ENGINE_VERSION = "Conversation Engine R0"
-COMMAND_LAYER_VERSION = "Retro Command Layer R0"
-TRUST_LAYER_VERSION = "TRUST0 R3"
-PERSONALITY_LAYER_VERSION = "Adaptive Personality R0"
-NETWORK_NAME = "DEVNET"
+RELEASE_VERSION = "1.0.0"
+ENGINE_NAME = "Conversation Engine"
+COMMAND_SERVICE_NAME = "Command Service"
+AUTHORIZATION_SERVICE_NAME = "Authorization Service"
+PERSONALITY_NAME = "Adaptive Personality"
+NETWORK_NAME = "DEEDEE-NET"
 NODE_NAME = "NODE-7"
 
 MOTD_LINES = (

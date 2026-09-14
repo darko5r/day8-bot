@@ -198,7 +198,7 @@ class GuildAuthorityBindingTests(unittest.TestCase):
                 self.assertEqual(result.reason, DenialReason.POLICY_DENIED)
 
 
-class DiscordTrustCommandTests(unittest.TestCase):
+class DiscordAuthorizationCommandTests(unittest.TestCase):
     def setUp(self):
         self.founder_context = DiscordTrustContext.from_ids(
             user_id="1",
