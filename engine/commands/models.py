@@ -2,6 +2,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 
+from engine.trust.models import ScopeRef
+
 
 class CommandId(str, Enum):
     HELP = "help"
@@ -9,6 +11,17 @@ class CommandId(str, Enum):
     VERSION = "version"
     UPTIME = "uptime"
     WHOIS = "whois"
+    ROLE = "role"
+    FLAG = "flag"
+    CAPABILITIES = "capabilities"
+    USERS = "users"
+    AUDIT = "audit"
+    FOUNDER = "founder"
+    SCOPE = "scope"
+    AUTHZ = "authz"
+    POLICY = "policy"
+    IDENTITY = "identity"
+    SHUTDOWN = "shutdown"
     EXIT = "exit"
 
 
@@ -22,6 +35,7 @@ class CommandParseStatus(str, Enum):
 class CommandAction(str, Enum):
     NONE = "none"
     EXIT_SESSION = "exit_session"
+    SHUTDOWN_SERVICE = "shutdown_service"
 
 
 class CommandStatus(str, Enum):
@@ -67,3 +81,10 @@ class CommandRuntime:
     started_at: float
     clock: Callable[[], float]
     protocol: str
+    actor_id: str = "terminal:user"
+    trust_service: object | None = None
+    authorization_scope: ScopeRef | None = None
+    identity_context: object | None = None
+
+    def effective_scope(self):
+        return self.authorization_scope or ScopeRef.global_scope()

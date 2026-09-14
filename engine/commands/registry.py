@@ -1,4 +1,5 @@
 from engine.commands.models import CommandId, CommandSpec
+from engine.trust.models import Capability
 
 
 COMMAND_SPECS = (
@@ -29,9 +30,85 @@ COMMAND_SPECS = (
     CommandSpec(
         command_id=CommandId.WHOIS,
         name="whois",
-        usage="!whois",
-        summary="Show your current scoped Dee Dee profile and task memory.",
+        usage="!whois [id]",
+        summary="Show self profile or authorized TRUST0 identity information.",
         accepts_arguments=True,
+    ),
+    CommandSpec(
+        command_id=CommandId.ROLE,
+        name="role",
+        usage="!role [id] | !role set <id> <role>",
+        summary="Inspect or manage TRUST0 service roles.",
+        accepts_arguments=True,
+    ),
+    CommandSpec(
+        command_id=CommandId.FLAG,
+        name="flag",
+        usage="!flag [id] | !flag add|remove <id> <flag>",
+        summary="Inspect or manage Dee Dee service flags.",
+        accepts_arguments=True,
+    ),
+    CommandSpec(
+        command_id=CommandId.CAPABILITIES,
+        name="capabilities",
+        usage="!capabilities [id]",
+        summary="Show effective TRUST0 capabilities.",
+        accepts_arguments=True,
+    ),
+    CommandSpec(
+        command_id=CommandId.USERS,
+        name="users",
+        usage="!users",
+        summary="List identities visible in the current TRUST0 scope.",
+    ),
+    CommandSpec(
+        command_id=CommandId.AUDIT,
+        name="audit",
+        usage="!audit [count]",
+        summary="Show recent TRUST0 authority changes (SOP or Founder).",
+        accepts_arguments=True,
+        required_capability=Capability.SERVICE_AUDIT.value,
+    ),
+    CommandSpec(
+        command_id=CommandId.FOUNDER,
+        name="founder",
+        usage="!founder | !founder transfer <id> CONFIRM",
+        summary="Show Founder or transfer root authority.",
+        accepts_arguments=True,
+    ),
+    CommandSpec(
+        command_id=CommandId.SCOPE,
+        name="scope",
+        usage="!scope",
+        summary="Show the current authorization scope.",
+    ),
+    CommandSpec(
+        command_id=CommandId.AUTHZ,
+        name="authz",
+        usage="!authz <capability> [scope]",
+        summary="Explain your authorization decision for a capability.",
+        accepts_arguments=True,
+    ),
+    CommandSpec(
+        command_id=CommandId.POLICY,
+        name="policy",
+        usage="!policy <capability>",
+        summary="Inspect TRUST0 capability policy (DV or higher).",
+        accepts_arguments=True,
+        required_capability=Capability.SERVICE_INSPECT.value,
+    ),
+    CommandSpec(
+        command_id=CommandId.IDENTITY,
+        name="identity",
+        usage="!identity",
+        summary="Show the adapter-bound stable identity and scope.",
+    ),
+    CommandSpec(
+        command_id=CommandId.SHUTDOWN,
+        name="shutdown",
+        usage="!shutdown",
+        summary="Stop the Dee Dee service (Founder only).",
+        required_capability=Capability.SERVICE_SHUTDOWN.value,
     ),
     CommandSpec(
         command_id=CommandId.EXIT,
@@ -40,6 +117,7 @@ COMMAND_SPECS = (
         summary="Close the current Dee Dee session.",
     ),
 )
+
 
 COMMANDS_BY_NAME = {spec.name: spec for spec in COMMAND_SPECS}
 
